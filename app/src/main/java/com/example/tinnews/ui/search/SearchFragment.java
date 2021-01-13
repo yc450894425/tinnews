@@ -19,6 +19,7 @@ import com.example.tinnews.model.NewsResponse;
 import com.example.tinnews.repository.NewsRepository;
 import com.example.tinnews.repository.NewsViewModelFactory;
 import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 
@@ -48,10 +49,18 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        int spanCount = 2;
         SearchNewsAdapter newsAdapter = new SearchNewsAdapter();
-        GridLayoutManager gridLayoutManager  = new GridLayoutManager(requireContext(), 2);
+        GridLayoutManager gridLayoutManager  = new GridLayoutManager(requireContext(), spanCount);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return position == 0 ? 2 : 1;
+            }
+        });
         binding.newsResultsRecyclerView.setLayoutManager(gridLayoutManager);
         binding.newsResultsRecyclerView.setAdapter(newsAdapter);
+        binding.newsResultsRecyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, 25, false));
         binding.newsSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override

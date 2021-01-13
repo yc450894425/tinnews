@@ -39,8 +39,14 @@ public class SearchNewsAdapter extends RecyclerView.Adapter<SearchNewsAdapter.Se
     @Override
     public void onBindViewHolder(@NonNull SearchNewsViewHolder holder, int position) {
         Article article = articles.get(position);
-        holder.favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
+        int favoriteIcon = R.drawable.ic_favorite_border_24dp;
+//        if (position % 2 == 0) {
+//            favoriteIcon = R.drawable.ic_favorite_24dp;
+//        }
+        holder.favoriteImageView.setImageResource(favoriteIcon);
         holder.itemTitleTextView.setText(article.title);
+        holder.itemAuthorTextView.setText(article.author);
+        holder.itemTimeTextView.setText(article.publishedAt);
         Picasso.get().load(article.urlToImage).into(holder.itemImageView);
     }
 
@@ -55,6 +61,8 @@ public class SearchNewsAdapter extends RecyclerView.Adapter<SearchNewsAdapter.Se
         ImageView itemImageView;
         ImageView favoriteImageView;
         TextView itemTitleTextView;
+        TextView itemTimeTextView;
+        TextView itemAuthorTextView;
 
         public SearchNewsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -63,6 +71,8 @@ public class SearchNewsAdapter extends RecyclerView.Adapter<SearchNewsAdapter.Se
             itemImageView = binding.searchItemImage;
             favoriteImageView = binding.searchItemFavorite;
             itemTitleTextView = binding.searchItemTitle;
+            itemTimeTextView = binding.searchItemTime;
+            itemAuthorTextView = binding.searchItemAuthor;
         }
     }
 }
