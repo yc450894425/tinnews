@@ -28,9 +28,9 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
             if (includeEdge) {
                 outRect.left = spacing; // spacing - column * ((1f / spanCount) * spacing)
                 outRect.right = spacing; // (column + 1) * ((1f / spanCount) * spacing)
-                outRect.top = spacing; // top edge
                 outRect.bottom = spacing; // item bottom
             }
+            outRect.top = spacing; // top edge
             return;
         }
         position -= 1;
@@ -44,7 +44,6 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
             outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
             outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
             outRect.top = spacing; // item top
-
         }
     }
 }

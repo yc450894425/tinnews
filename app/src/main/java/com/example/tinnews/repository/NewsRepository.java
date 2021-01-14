@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.tinnews.model.NewsResponse;
 import com.example.tinnews.network.NewsApi;
 import com.example.tinnews.network.RetrofitClient;
+import com.example.tinnews.ui.home.HomeInput;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,9 +23,12 @@ public class NewsRepository {
         newsApi = RetrofitClient.newInstance(context).create(NewsApi.class);
     }
 
-    public LiveData<NewsResponse> getTopHeadlines(String country) {
+    public LiveData<NewsResponse> getTopHeadlines(HomeInput homeInput) {
+        String country = homeInput.country;
+        Integer page = homeInput.page;
+        Integer pageSize = homeInput.pageSize;
         MutableLiveData<NewsResponse> topHeadlinesLiveData = new MutableLiveData<>();
-        newsApi.getTopHeadlines(country)
+        newsApi.getTopHeadlines(country, page, pageSize)
                 .enqueue(new Callback<NewsResponse>() {
                     @Override
                     public void onResponse(Call<NewsResponse> call, Response<NewsResponse> response) {
