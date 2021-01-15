@@ -1,9 +1,11 @@
 package com.example.tinnews.ui.home;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tinnews.databinding.FragmentHomeBinding;
+import com.example.tinnews.model.Article;
 import com.example.tinnews.model.NewsResponse;
 import com.example.tinnews.repository.NewsRepository;
 import com.example.tinnews.repository.NewsViewModelFactory;
@@ -25,6 +28,9 @@ import com.yuyakaido.android.cardstackview.RewindAnimationSetting;
 import com.yuyakaido.android.cardstackview.StackFrom;
 import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 public class HomeFragment extends Fragment implements CardStackListener {
 
     private HomeViewModel viewModel;
@@ -32,6 +38,7 @@ public class HomeFragment extends Fragment implements CardStackListener {
     private CardStackLayoutManager layoutManager;
     private CardSwipeAdapter swipeAdapter;
     private HomeInput input;
+    private List<Article> articles;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -65,9 +72,10 @@ public class HomeFragment extends Fragment implements CardStackListener {
         binding.homeLikeButton.setOnClickListener(v -> swipeCard(Direction.Right));
         binding.homeUnlikeButton.setOnClickListener(v -> swipeCard(Direction.Left));
         binding.homeRewindButton.setOnClickListener(v -> rewindCard());
+        binding.homeRefreshButton.setOnClickListener(v -> loadMore());
 
         NewsRepository repository = new NewsRepository(getContext());
-        // create/get viewModel via factory pattern
+        // create a new/get an old viewModel via factory pattern
         viewModel = new ViewModelProvider(this, new NewsViewModelFactory(repository))
                 .get(HomeViewModel.class);
 
@@ -80,7 +88,8 @@ public class HomeFragment extends Fragment implements CardStackListener {
                             @Override
                             public void onChanged(NewsResponse newsResponse) {
                                 if (newsResponse != null) {
-                                    swipeAdapter.setArticles(newsResponse.articles);
+                                    articles = newsResponse.articles;
+                                    swipeAdapter.setArticles(articles);
                                 }
                             }
                         });
@@ -94,30 +103,40 @@ public class HomeFragment extends Fragment implements CardStackListener {
                 .build();
         layoutManager.setSwipeAnimationSetting(setting);
         binding.homeCardStackView.swipe();
-
     }
 
     private void rewindCard() {
         RewindAnimationSetting setting = new RewindAnimationSetting
                 .Builder()
                 .setDirection(Direction.Bottom)
-                .setDuration(Duration.Normal.duration)
+                .setDuration(Duration.Fast.duration)
                 .build();
         layoutManager.setRewindAnimationSetting(setting);
         binding.homeCardStackView.rewind();
     }
 
+    private void loadMore() {
+        input = new HomeInput(input.country, input.page + 1, input.pageSize);
+        viewModel.setHomeInput(input);
+    }
+
     @Override
     public void onCardDragging(Direction direction, float ratio) {
-
     }
 
     @Override
     public void onCardSwiped(Direction direction) {
+        int currPosition = layoutManager.getTopPosition();
+        System.out.println(currPosition);
         if (direction == Direction.Left) {
-            Log.d("CardStackView", "Unliked " + layoutManager.getTopPosition());
+            Log.d("CardStackView", "Unliked " + currPosition);
         } else if (direction == Direction.Right) {
-            Log.d("CardStackView", "Liked "  + layoutManager.getTopPosition());
+            Log.d("CardStackView", "Liked "  + currPosition);
+            Article article = articles.get(currPosition - 1);
+            viewModel.setFavoriteArticleInput(article);
+        }
+        if (currPosition == swipeAdapter.getItemCount()) {
+            loadMore();
         }
     }
 
@@ -133,15 +152,9 @@ public class HomeFragment extends Fragment implements CardStackListener {
 
     @Override
     public void onCardAppeared(View view, int position) {
-
     }
 
     @Override
     public void onCardDisappeared(View view, int position) {
-        int itemCount = swipeAdapter.getItemCount();
-        if (position == itemCount - 1) {
-            input = new HomeInput(input.country, input.page + 1, input.pageSize);
-            viewModel.setHomeInput(input);
-        }
     }
 }

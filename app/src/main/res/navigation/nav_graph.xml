@@ -20,10 +20,5 @@
         android:name="com.example.tinnews.ui.save.SaveFragment"
         android:label="@string/title_save"
         tools:layout="@layout/fragment_save" />
-    <fragment
-        android:id="@+id/navigation_setting"
-        android:name="com.example.tinnews.ui.setting.SettingFragment"
-        android:label="@string/title_setting"
-        tools:layout="@layout/fragment_setting"/>
 
 </navigation>

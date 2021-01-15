@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private static final String API_KEY = "512892131cbb4d909aa85f199e34f73d";
+    private static final String API_KEY = "2b876b06437c4ec9bf299e605adb8aeb";
     private static final String BASE_URL = "https://newsapi.org/v2/";
 
     public static Retrofit newInstance(Context context) {

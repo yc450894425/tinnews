@@ -1,29 +1,24 @@
 package com.example.tinnews.model;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.util.Objects;
 
+@Entity
 public class Article {
 
     public String author;
     public String content;
     public String description;
     public String publishedAt;
-    public String url;
-    public String urlToImage;
     public String title;
 
-    @Override
-    public String toString() {
-        return "Article{" +
-                "author='" + author + '\'' +
-                ", content='" + content + '\'' +
-                ", description='" + description + '\'' +
-                ", publishedAt='" + publishedAt + '\'' +
-                ", url='" + url + '\'' +
-                ", urlToImage='" + urlToImage + '\'' +
-                ", title='" + title + '\'' +
-                '}';
-    }
+    @NonNull
+    @PrimaryKey
+    public String url;
+    public String urlToImage;
 
     @Override
     public boolean equals(Object o) {
@@ -34,13 +29,26 @@ public class Article {
                 Objects.equals(content, article.content) &&
                 Objects.equals(description, article.description) &&
                 Objects.equals(publishedAt, article.publishedAt) &&
-                Objects.equals(url, article.url) &&
-                Objects.equals(urlToImage, article.urlToImage) &&
-                Objects.equals(title, article.title);
+                Objects.equals(title, article.title) &&
+                url.equals(article.url) &&
+                Objects.equals(urlToImage, article.urlToImage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(author, content, description, publishedAt, url, urlToImage, title);
+        return Objects.hash(author, content, description, publishedAt, title, url, urlToImage);
+    }
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "author='" + author + '\'' +
+                ", content='" + content + '\'' +
+                ", description='" + description + '\'' +
+                ", publishedAt='" + publishedAt + '\'' +
+                ", title='" + title + '\'' +
+                ", url='" + url + '\'' +
+                ", urlToImage='" + urlToImage + '\'' +
+                '}';
     }
 }
