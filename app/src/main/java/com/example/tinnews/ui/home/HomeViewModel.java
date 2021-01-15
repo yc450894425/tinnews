@@ -34,7 +34,11 @@ public class HomeViewModel extends ViewModel {
         return Transformations.switchMap(homeInputLiveData, repository::getTopHeadlines);
     }
 
-    public void setFavoriteArticleInput(Article article) {
-        repository.favoriteArticle(article);
+    public LiveData<Boolean> setFavoriteArticle(Article article) {
+        return repository.favoriteArticle(article);
+    }
+
+    public void deleteFavoriteArticle(Article article) {
+        repository.deleteSavedArticle(article);
     }
 }

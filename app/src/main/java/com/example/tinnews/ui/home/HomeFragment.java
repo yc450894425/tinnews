@@ -14,7 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.tinnews.TinNewsApplication;
 import com.example.tinnews.databinding.FragmentHomeBinding;
 import com.example.tinnews.model.Article;
 import com.example.tinnews.model.NewsResponse;
@@ -84,13 +86,10 @@ public class HomeFragment extends Fragment implements CardStackListener {
         viewModel.getTopHeadlines()
                 .observe(
                         getViewLifecycleOwner(),
-                        new Observer<NewsResponse>() {
-                            @Override
-                            public void onChanged(NewsResponse newsResponse) {
-                                if (newsResponse != null) {
-                                    articles = newsResponse.articles;
-                                    swipeAdapter.setArticles(articles);
-                                }
+                        newsResponse -> {
+                            if (newsResponse != null) {
+                                articles = newsResponse.articles;
+                                swipeAdapter.setArticles(articles);
                             }
                         });
     }
@@ -120,6 +119,11 @@ public class HomeFragment extends Fragment implements CardStackListener {
         viewModel.setHomeInput(input);
     }
 
+    private void showToast(Boolean success) {
+        String text = success ? "Saved successfully!" : "Saved failed";
+        Toast.makeText(this.requireContext(), text, Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void onCardDragging(Direction direction, float ratio) {
     }
@@ -133,7 +137,11 @@ public class HomeFragment extends Fragment implements CardStackListener {
         } else if (direction == Direction.Right) {
             Log.d("CardStackView", "Liked "  + currPosition);
             Article article = articles.get(currPosition - 1);
-            viewModel.setFavoriteArticleInput(article);
+            viewModel.setFavoriteArticle(article)
+                    .observe(
+                            getViewLifecycleOwner(),
+                            this::showToast
+                            );
         }
         if (currPosition == swipeAdapter.getItemCount()) {
             loadMore();
@@ -142,7 +150,7 @@ public class HomeFragment extends Fragment implements CardStackListener {
 
     @Override
     public void onCardRewound() {
-
+        viewModel.deleteFavoriteArticle(articles.get(layoutManager.getTopPosition()));
     }
 
     @Override

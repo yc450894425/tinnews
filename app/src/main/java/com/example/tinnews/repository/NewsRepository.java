@@ -1,7 +1,9 @@
 package com.example.tinnews.repository;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -12,7 +14,10 @@ import com.example.tinnews.model.Article;
 import com.example.tinnews.model.NewsResponse;
 import com.example.tinnews.network.NewsApi;
 import com.example.tinnews.network.RetrofitClient;
+import com.example.tinnews.ui.home.HomeFragment;
 import com.example.tinnews.ui.home.HomeInput;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -74,6 +79,14 @@ public class NewsRepository {
         return everyThingLiveData;
     }
 
+    public LiveData<List<Article>> getAllSavedArticles() {
+        return database.articleDao().getAllArticles();
+    }
+
+    public void deleteSavedArticle(Article article) {
+        AsyncTask.execute(() -> database.articleDao().deleteArticle(article));
+    }
+
     public LiveData<Boolean> favoriteArticle(Article article) {
         MutableLiveData<Boolean> resultLiveData = new MutableLiveData<>();
         new FavoriteAsyncTask(database, resultLiveData).execute(article);
@@ -95,6 +108,8 @@ public class NewsRepository {
             Article article = articles[0];
             try {
                 database.articleDao().saveArticle(article);
+            } catch (SQLiteConstraintException e) {
+                return true;
             } catch (Exception e) {
                 return false;
             }
@@ -105,7 +120,6 @@ public class NewsRepository {
         protected void onPostExecute(Boolean success) {
             liveData.setValue(success);
         }
-
     }
 
 }
