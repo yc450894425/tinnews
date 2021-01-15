@@ -6,6 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
@@ -15,6 +18,7 @@ import android.view.ViewGroup;
 import com.example.tinnews.R;
 import com.example.tinnews.databinding.FragmentHomeBinding;
 import com.example.tinnews.databinding.FragmentSaveBinding;
+import com.example.tinnews.model.Article;
 import com.example.tinnews.repository.NewsRepository;
 import com.example.tinnews.repository.NewsViewModelFactory;
 
@@ -62,5 +66,18 @@ public class SaveFragment extends Fragment {
                             }
                         }
                         );
+
+        savedNewsAdapter.setItemCallback(new SavedNewsAdapter.ItemCallback() {
+            @Override
+            public void onOpenDetail(Article article) {
+                SaveFragmentDirections.ActionNavigationSaveToNavigationDetails direction = SaveFragmentDirections.actionNavigationSaveToNavigationDetails(article);
+                NavHostFragment.findNavController(SaveFragment.this).navigate(direction);
+            }
+
+            @Override
+            public void onRemoveFavorite(Article article) {
+                viewModel.deleteSavedArticle(article);
+            }
+        });
     }
 }

@@ -19,13 +19,23 @@ import java.util.List;
 
 public class SavedNewsAdapter extends RecyclerView.Adapter<SavedNewsAdapter.SavedNewsViewHolder> {
 
+    interface ItemCallback {
+        void onOpenDetail(Article article);
+        void onRemoveFavorite(Article article);
+    }
+
     // 1. Supporting data:
     private List<Article> articles = new ArrayList<>();
+    private ItemCallback itemCallback;
 
     public void setArticles(List<Article> newsList) {
         articles.clear();
         articles.addAll(newsList);
         notifyDataSetChanged();
+    }
+
+    public void setItemCallback(ItemCallback itemCallback) {
+        this.itemCallback = itemCallback;
     }
 
     // 2. Adapter overrides:
@@ -42,6 +52,8 @@ public class SavedNewsAdapter extends RecyclerView.Adapter<SavedNewsAdapter.Save
         holder.authorTextView.setText(article.author);
         holder.descriptionTextView.setText(article.description);
         Picasso.get().load(article.urlToImage).into(holder.imageView);
+        holder.favoriteIcon.setOnClickListener(v -> itemCallback.onRemoveFavorite(article));
+        holder.itemView.setOnClickListener(v -> itemCallback.onOpenDetail(article));
     }
 
     @Override

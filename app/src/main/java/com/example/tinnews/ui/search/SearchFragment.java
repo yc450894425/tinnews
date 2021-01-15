@@ -15,10 +15,12 @@ import android.view.ViewGroup;
 
 import com.example.tinnews.R;
 import com.example.tinnews.databinding.FragmentSearchBinding;
+import com.example.tinnews.model.Article;
 import com.example.tinnews.model.NewsResponse;
 import com.example.tinnews.repository.NewsRepository;
 import com.example.tinnews.repository.NewsViewModelFactory;
 import androidx.appcompat.widget.SearchView;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 
@@ -93,5 +95,18 @@ public class SearchFragment extends Fragment {
                         }
                     }
                 });
+
+        newsAdapter.setItemCallback(new SearchNewsAdapter.ItemCallback() {
+            @Override
+            public void onOpenDetails(Article article) {
+                SearchFragmentDirections.ActionNavigationSearchToNavigationDetails direction = SearchFragmentDirections.actionNavigationSearchToNavigationDetails(article);
+                NavHostFragment.findNavController(SearchFragment.this).navigate(direction);
+            }
+
+            @Override
+            public void onRemoveFavorite(Article article) {
+
+            }
+        });
     }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+import com.example.tinnews.model.Article;
 import com.example.tinnews.model.NewsResponse;
 import com.example.tinnews.repository.NewsRepository;
 
@@ -24,4 +25,13 @@ public class SearchViewModel extends ViewModel {
     public LiveData<NewsResponse> searchNews() {
         return Transformations.switchMap(searchInput, repository::searchNews);
     }
+
+    public LiveData<Boolean> setFavoriteArticle(Article article) {
+        return repository.favoriteArticle(article);
+    }
+
+    public void deleteFavoriteArticle(Article article) {
+        repository.deleteSavedArticle(article);
+    }
+
 }
