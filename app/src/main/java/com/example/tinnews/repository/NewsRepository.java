@@ -93,6 +93,10 @@ public class NewsRepository {
         return resultLiveData;
     }
 
+    public LiveData<Integer> checkIfFavorite(Article article) {
+        return database.articleDao().checkIfSaved(article.url);
+    }
+
     private static class FavoriteAsyncTask extends AsyncTask<Article, Void, Boolean> {
 
         private final TinNewsDatabase database;
@@ -121,5 +125,4 @@ public class NewsRepository {
             liveData.setValue(success);
         }
     }
-
 }

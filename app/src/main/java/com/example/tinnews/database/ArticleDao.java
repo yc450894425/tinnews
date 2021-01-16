@@ -19,6 +19,9 @@ public interface ArticleDao {
     @Query("SELECT * FROM article")
     LiveData<List<Article>> getAllArticles();
 
+    @Query("SELECT COUNT(*) FROM article WHERE url IS :articleUrl")
+    LiveData<Integer> checkIfSaved(String articleUrl);
+
     @Delete
     void deleteArticle(Article article);
 }

@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.tinnews.ui.details.DetailsFragment;
+import com.example.tinnews.ui.details.DetailsViewModel;
 import com.example.tinnews.ui.home.HomeViewModel;
 import com.example.tinnews.ui.save.SaveViewModel;
 import com.example.tinnews.ui.search.SearchViewModel;
@@ -25,6 +27,8 @@ public class NewsViewModelFactory implements ViewModelProvider.Factory {
             return (T) new SearchViewModel(repository);
         } else if (modelClass.isAssignableFrom(SaveViewModel.class)) {
             return (T) new SaveViewModel(repository);
+        } else if (modelClass.isAssignableFrom(DetailsViewModel.class)) {
+            return (T) new DetailsViewModel(repository);
         } else {
             throw new IllegalStateException("Unknown ViewModel");
         }

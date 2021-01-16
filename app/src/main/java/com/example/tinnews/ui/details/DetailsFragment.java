@@ -8,7 +8,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.tinnews.repository.NewsRepository;
+import com.example.tinnews.repository.NewsViewModelFactory;
 import com.example.tinnews.ui.details.DetailsFragmentArgs;
 import com.example.tinnews.databinding.FragmentDetailsBinding;
 import com.example.tinnews.model.Article;
@@ -40,6 +43,15 @@ public class DetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Article article = DetailsFragmentArgs.fromBundle(getArguments()).getArticle();
+        NewsRepository repository = new NewsRepository(getContext());
+//        DetailsViewModel viewModel = new ViewModelProvider(this, new NewsViewModelFactory(repository)).get(DetailsViewModel.class);
+//        viewModel.checkIfFavorite(article).observe(
+//                getViewLifecycleOwner(),
+//                exists -> {
+//                    if (exists == 0) {
+//                        binding.detailsFavoriteImageView
+//                    }
+//                });
         binding.detailsTitleTextView.setText(article.title);
         binding.detailsAuthorTextView.setText(article.author);
         binding.detailsDateTextView.setText(article.publishedAt);

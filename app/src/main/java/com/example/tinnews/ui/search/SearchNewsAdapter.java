@@ -50,8 +50,6 @@ public class SearchNewsAdapter extends RecyclerView.Adapter<SearchNewsAdapter.Se
     @Override
     public void onBindViewHolder(@NonNull SearchNewsViewHolder holder, int position) {
         Article article = articles.get(position);
-        int favoriteIcon = R.drawable.ic_favorite_border_24dp;
-        holder.favoriteImageView.setImageResource(favoriteIcon);
         holder.itemTitleTextView.setText(article.title);
         holder.itemAuthorTextView.setText(article.author);
         holder.itemTimeTextView.setText(article.publishedAt);
@@ -78,7 +76,6 @@ public class SearchNewsAdapter extends RecyclerView.Adapter<SearchNewsAdapter.Se
 
             SearchNewsItemBinding binding = SearchNewsItemBinding.bind(itemView);
             itemImageView = binding.searchItemImage;
-            favoriteImageView = binding.searchItemFavorite;
             itemTitleTextView = binding.searchItemTitle;
             itemTimeTextView = binding.searchItemTime;
             itemAuthorTextView = binding.searchItemAuthor;
