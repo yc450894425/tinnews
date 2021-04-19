@@ -61,7 +61,6 @@ public class SaveFragment extends Fragment {
                         getViewLifecycleOwner(),
                         savedArticles -> {
                             if (savedArticles != null) {
-                                Log.d("SaveFragment", savedArticles.toString());
                                 savedNewsAdapter.setArticles(savedArticles);
                             }
                         }

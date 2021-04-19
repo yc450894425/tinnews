@@ -17,4 +17,12 @@ public class DetailsViewModel extends ViewModel {
     public LiveData<Integer> checkIfFavorite(Article article) {
         return repository.checkIfFavorite(article);
     }
+
+    public void setFavoriteArticleInput(Article article) {
+        repository.favoriteArticle(article);
+    }
+
+    public void deleteSavedArticle(Article article) {
+        repository.deleteSavedArticle(article);
+    }
 }
